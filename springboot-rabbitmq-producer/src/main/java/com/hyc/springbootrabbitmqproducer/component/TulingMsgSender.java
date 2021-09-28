@@ -28,7 +28,7 @@ public class TulingMsgSender {
      * @param msg 消息内容
      * @param msgProp 消息属性
      */
-    public void sendMsg(Object msg, Map<String,Object> msgProp) {
+    public void sendMsg(String exchangeName, String routingKey, Object msg, Map<String,Object> msgProp) {
 
         MessageHeaders messageHeaders = new MessageHeaders(msgProp);
 
@@ -44,10 +44,18 @@ public class TulingMsgSender {
         //开启消息可达监听
         rabbitTemplate.setReturnCallback(new TulingRetrunCallBack());
 
-        rabbitTemplate.convertAndSend("springboot.direct.exchange","springboot.key",message,correlationData);
+        rabbitTemplate.convertAndSend(exchangeName,routingKey,message,correlationData);
 
-        rabbitTemplate.convertAndSend("springboot.direct.exchange","springboot.key2",message,correlationData);
+    }
 
+    /**
+     * 测试发送我们的消息
+     * @param msg 消息内容
+     * @param msgProp 消息属性
+     */
+    public void sendMsg(Object msg, Map<String,Object> msgProp) {
+        sendMsg("springboot.direct.exchange","springboot.key", msg, msgProp);
+        sendMsg("springboot.direct.exchange","springboot.key2", msg, msgProp);
     }
 
     public void sendOrderMsg(Order order) throws Exception {

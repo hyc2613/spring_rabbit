@@ -27,6 +27,17 @@ public class SpringbootRabbitmqProducerApplicationTests {
     private TulingMsgSender tulingMsgSender;
 
     @Test
+    public void testSendDirectQueue() {
+        String msg = "msg with springboot!";
+
+        Map<String, Object> msgProperties = new HashMap<>();
+        msgProperties.put("AUTHOR", "huangyc");
+
+        tulingMsgSender.sendMsg("tuling.direct.exchange","tuling.key", msg, msgProperties);
+
+    }
+
+    @Test
     public void testMsgSender() throws JsonProcessingException {
         Map<String,Object> msgProp = new HashMap<>();
         msgProp.put("company","tuling");
@@ -38,8 +49,6 @@ public class SpringbootRabbitmqProducerApplicationTests {
         order.setPayMoney(10000.00);
         order.setCreateDt(new Date());
         ObjectMapper objectMapper = new ObjectMapper();
-
-
         tulingMsgSender.sendMsg(objectMapper.writeValueAsString(order),msgProp);
     }
 
